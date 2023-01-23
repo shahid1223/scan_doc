@@ -4,42 +4,67 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <title>Document</title>
-<style>
-  .result{
-    background-color: green;
-    color:#fff;
-    padding:20px;
-  }
-  .row{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
 </head>
 <body>
-  <div class="row">
-    <div class="col">
-      <div style="width:500px;" id="reader"></div>
-    </div>
-    <div class="col" style="padding:30px;">
-      <h4>SCAN RESULT</h4>
-      <div id="result">Result Here</div>
-    </div>
-  </div>
-  <script type="text/javascript">
-    function onScanSuccess(qrCodeMessage) {
-        document.getElementById('result').innerHTML = '<span class="result">'+qrCodeMessage+'</span>';
+  <style>
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    function onScanError(errorMessage) {
-      //handle scan error
+    #reader {
+        width: 600px;
     }
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", { fps: 10, qrbox: 250 });
-    html5QrcodeScanner.render(onScanSuccess, onScanError);
-    </script>
+    #result {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+</style>
+
+<main>
+    <div id="reader"></div>
+    <div id="result"></div>
+</main>
+    
+
+<script>
+
+    const scanner = new Html5QrcodeScanner('reader', { 
+        // Scanner will be initialized in DOM inside element with id of 'reader'
+        qrbox: {
+            width: 250,
+            height: 250,
+        },  // Sets dimensions of scanning box (set relative to reader element width)
+        fps: 20, // Frames per second to attempt a scan
+    });
+
+
+    scanner.render(success, error);
+    // Starts scanner
+
+    function success(result) {
+
+        document.getElementById('result').innerHTML = `
+        <h2>Success!</h2>
+        <p><a href="${result}">${result}</a></p>
+        `;
+        // Prints result as a link inside result element
+
+        scanner.clear();
+        // Clears scanning instance
+
+        document.getElementById('reader').remove();
+        // Removes reader element from DOM since no longer needed
+    
+    }
+
+    function error(err) {
+        console.error(err);
+        // Prints any errors to the console
+    }
+
+</script>
 </body>
 </html>
