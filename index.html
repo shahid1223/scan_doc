@@ -1,42 +1,39 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>Scan Image</title>
-  </head>
-  <body>
-    <button id="scan-button">Scan</button>
-    <script>
-      const scanButton = document.getElementById("scan-button");
-      scanButton.addEventListener("click", () => {
-        // Check if the browser supports the camera API
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          // Open the device's camera
-          navigator.mediaDevices
-            .getUserMedia({ video: true })
-            .then(stream => {
-              // Create an HTML video element to display the camera feed
-              const video = document.createElement("video");
-              video.srcObject = stream;
-              video.play();
-              document.body.appendChild(video);
-              // Add a button to take a picture
-              const takePictureButton = document.createElement("button");
-              takePictureButton.innerText = "Take Picture";
-              takePictureButton.addEventListener("click", () => {
-                // Create an HTML image element to display the picture
-                const img = document.createElement("img");
-                img.src = video.src;
-                document.body.appendChild(img);
-              });
-              document.body.appendChild(takePictureButton);
-            })
-            .catch(error => {
-              console.error("Error accessing camera:", error);
-            });
-        } else {
-          console.error("Camera API not supported in this browser");
-        }
-      });
-    </script>
-  </body>
+<head>
+   <title>Open webcam using JavaScript. </title>
+</head>
+<body>
+   <h1>Open WebCam Using JavaScript</h1>
+   <br/>
+   <button id="startBtn" onclick="openCam()">Open Webcam</button>
+   <br/><br/>
+   <video id="videoCam"></video>
+   <script>
+      function openCam(){
+         let All_mediaDevices=navigator.mediaDevices
+         if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+            console.log("getUserMedia() not supported.");
+            return;
+         }
+         All_mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+         })
+         .then(function(vidStream) {
+            var video = document.getElementById('videoCam');
+            if ("srcObject" in video) {
+               video.srcObject = vidStream;
+            } else {
+               video.src = window.URL.createObjectURL(vidStream);
+            }
+            video.onloadedmetadata = function(e) {
+               video.play();
+            };
+         })
+         .catch(function(e) {
+            console.log(e.name + ": " + e.message);
+         });
+      }
+   </script>
+</body>
 </html>
