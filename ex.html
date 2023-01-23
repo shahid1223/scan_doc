@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scan Image</title>
+  </head>
+  <body>
+    <button id="scan-button">Scan</button>
+    <script>
+      const scanButton = document.getElementById("scan-button");
+      scanButton.addEventListener("click", () => {
+        // Check if the browser supports the camera API
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          // Open the device's camera
+          navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then(stream => {
+              // Create an HTML video element to display the camera feed
+              const video = document.createElement("video");
+              video.srcObject = stream;
+              video.play();
+              document.body.appendChild(video);
+              // Add a button to take a picture
+              const takePictureButton = document.createElement("button");
+              takePictureButton.innerText = "Take Picture";
+              takePictureButton.addEventListener("click", () => {
+                // Create an HTML image element to display the picture
+                const img = document.createElement("img");
+                img.src = video.src;
+                document.body.appendChild(img);
+              });
+              document.body.appendChild(takePictureButton);
+            })
+            .catch(error => {
+              console.error("Error accessing camera:", error);
+            });
+        } else {
+          console.error("Camera API not supported in this browser");
+        }
+      });
+    </script>
+  </body>
+</html>
