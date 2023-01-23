@@ -1,128 +1,42 @@
-<!-- <html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-   <title>Open webcam using JavaScript. </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="html5-qrcode.min.js"></script>
+  <title>Document</title>
+<style>
+  .result{
+    background-color: green;
+    color:#fff;
+    padding:20px;
+  }
+  .row{
+    display:flex;
+  }
+</style>
 </head>
 <body>
-   <h1>Open WebCam Using JavaScript</h1>
-   <br/>
-   <button id="startBtn" onclick="openCam()">Open Webcam</button>
-   <br/><br/>
-   <video id="videoCam"></video>
-   <script>
-      function openCam(){
-         let All_mediaDevices=navigator.mediaDevices
-         if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
-            console.log("getUserMedia() not supported.");
-            return;
-         }
-         All_mediaDevices.getUserMedia({
-            audio: true,
-            video: true
-         })
-         .then(function(vidStream) {
-            var video = document.getElementById('videoCam');
-            if ("srcObject" in video) {
-               video.srcObject = vidStream;
-            } else {
-               video.src = window.URL.createObjectURL(vidStream);
-            }
-            video.onloadedmetadata = function(e) {
-               video.play();
-            };
-         })
-         .catch(function(e) {
-            console.log(e.name + ": " + e.message);
-         });
-      }
-   </script>
+  <div class="row">
+    <div class="col">
+      <div style="width:500px;" id="reader"></div>
+    </div>
+    <div class="col" style="padding:30px;">
+      <h4>SCAN RESULT</h4>
+      <div id="result">Result Here</div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function onScanSuccess(qrCodeMessage) {
+        document.getElementById('result').innerHTML = '<span class="result">'+qrCodeMessage+'</span>';
+    }
+    function onScanError(errorMessage) {
+      //handle scan error
+    }
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+    </script>
 </body>
-</html> -->
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Scan Image</title>
-  </head>
-  <body>
-    <button id="scan-button">Scan</button>
-    <script>
-      const scanButton = document.getElementById("scan-button");
-      scanButton.addEventListener("click", () => {
-        // Check if the browser supports the camera API
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          // Open the device's camera
-          navigator.mediaDevices
-            .getUserMedia({ video: true })
-            .then(stream => {
-              // Create an HTML video element to display the camera feed
-              const video = document.createElement("video");
-              video.srcObject = stream;
-              video.play();
-              document.body.appendChild(video);
-              // Add a button to take a picture
-              const takePictureButton = document.createElement("button");
-              takePictureButton.innerText = "Take Picture";
-              takePictureButton.addEventListener("click", () => {
-                // Create an HTML canvas element to draw the picture
-                const canvas = document.createElement("canvas");
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext("2d").drawImage(video, 0, 0);
-                // Create an HTML image element to display the picture
-                const img = document.createElement("img");
-                img.src = canvas.toDataURL();
-                document.body.appendChild(img);
-                // Create a button to save the picture
-                const savePictureButton = document.createElement("button");
-                savePictureButton.innerText = "Save Picture";
-                savePictureButton.addEventListener("click", () => {
-                  // Create a Blob from the image data
-                  const imageBlob = dataURItoBlob(img.src);
-                  // Create a File from the Blob
-                  const file = new File([imageBlob], "image.jpg", {
-                    type: "image/jpeg"
-                  });
-                  // Use the browser's download API to save the file
-                  if (navigator.msSaveBlob) {
-                    navigator.msSaveBlob(file);
-                  } else {
-                    const a = document.createElement("a");
-                    a.href = URL.createObjectURL(file);
-                    a.download = file.name;
-                    a.click();
-                  }
-                });
-                document.body.appendChild(savePictureButton);
-              });
-              document.body.appendChild(takePictureButton);
-            })
-            .catch(error => {
-              console.error("Error accessing camera:", error);
-            });
-        } else {
-          console.error("Camera API not supported in this browser");
-        }
-      });
-      
-      function dataURItoBlob(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
-        var byteString;
-        if (dataURI.split(",")[0].indexOf("base64") >= 0)
-          byteString = atob(dataURI.split(",")[1]);
-        else byteString = unescape(dataURI.split(",")[1]);
-        // separate out the mime component
-        var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-        // write the bytes of the string to an ArrayBuffer
-        var arrayBuffer = new ArrayBuffer(byteString.length);
-        var _ia = new Uint8Array(arrayBuffer);
-        for (var i = 0; i < byteString.length; i++) {
-        _ia[i] = byteString.charCodeAt(i);
-        }
-        // write the ArrayBuffer to a blob
-        var blob = new Blob([arrayBuffer], { type: mimeString });
-        return blob;
-        }
-        </script>
-        
-          </body>
-        </html>
+</html>
