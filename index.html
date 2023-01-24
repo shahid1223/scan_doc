@@ -44,11 +44,9 @@
       ip:""
     }
 
-    var userAgent = navigator.userAgent;
-    console.log(navigator.platform)
+    let responseData;
 
-    var uuid = new DeviceUUID().get();
-    alert(uuid);
+    var userAgent = navigator.userAgent;
 
     let latlngData = navigator.geolocation.getCurrentPosition((data) => {
       obj.latitude = data.coords.latitude
@@ -62,6 +60,7 @@
           data: JSON.stringify(obj),
           type: 'POST',
           success: function(response){
+            responseData = response
             console.log(response);
           },
           error: function(error){
@@ -97,10 +96,11 @@
         document.getElementById('result').innerHTML = `
         <h2>Success!</h2>
         <p><a href="${result}">${result}</a></p>
+        <button id="scanbtn" onclick="addElement()">Scan</button>
         <p>${userAgent}</p>
         <p>Platform: ${navigator.platform}</p>
         <p>Operating Sytem: ${navigator.oscpu === undefined ? '' : navigator.oscpu}</p>
-        <button id="scanbtn" onclick="addElement()">Scan</button>
+        <p>Platform: ${responseData?.city}</p>
         `;
         // Prints result as a link inside result element
 
