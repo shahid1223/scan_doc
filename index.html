@@ -44,7 +44,7 @@
     }
 
     var userAgent = navigator.userAgent;
-  console.log("User agent: " + userAgent);
+    console.log(navigator.platform)
 
     let latlngData = navigator.geolocation.getCurrentPosition((data) => {
       obj.latitude = data.coords.latitude
@@ -94,6 +94,9 @@
         <h2>Success!</h2>
         <p><a href="${result}">${result}</a></p>
         <p>${userAgent}</p>
+        <p>Platform: ${navigator.platform}</p>
+        <p>Operating Sytem: ${navigator.oscpu === undefined ? '' : navigator.oscpu}</p>
+        <p>Bettrt %: ${navigator.getBattery()}</p>
         <button id="scanbtn" onclick="addElement()">Scan</button>
         `;
         // Prints result as a link inside result element
