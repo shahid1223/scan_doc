@@ -28,6 +28,7 @@
 <main>
     <div id="reader"></div>
     <div id="result"></div>
+    <button onclick="myFunction()" id="removeButton">Scan</button>
 </main>
     
 
@@ -58,6 +59,7 @@
     // Starts scanner
 
     function myFunction(){
+      console.log("shahid")
       document.getElementsByTagName('h2').remove();
       document.getElementsByTagName('p').remove();
       document.getElementsByTagName('a').remove();
@@ -79,7 +81,7 @@
         scanner.clear();
         // Clears scanning instance
 
-        document.getElementById('reader').remove();
+       // document.getElementById('reader').remove();
         // Removes reader element from DOM since no longer needed
     
     }
