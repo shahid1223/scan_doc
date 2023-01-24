@@ -23,12 +23,14 @@
         text-align: center;
         font-size: 1.5rem;
     }
+    .scanbtn{
+      display: none;
+    }
 </style>
 
-<main>
+<main id="main">
     <div id="reader"></div>
     <div id="result"></div>
-    <div id="result2"></div>
 </main>
     
 
@@ -61,10 +63,12 @@
 
     function success(result) {
 
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "result");
         document.getElementById('result').innerHTML = `
         <h2>Success!</h2>
         <p><a href="${result}">${result}</a></p>
-        <button id="removeButton">Scan</button>
+        <button id="scanbtn" onclick="addElement()">Scan</button>
         `;
         // Prints result as a link inside result element
 
@@ -73,7 +77,7 @@
 
         document.getElementById('reader').remove();
         // Removes reader element from DOM since no longer needed
-    
+ 
     }
 
     function error(err) {
@@ -82,19 +86,15 @@
     }
 
     
-    let renderReader = document.getElementById("removeButton");
-    renderReader.addEventListener("click", function() {
-      const scanner2 = new Html5QrcodeScanner('reader', { 
-        // Scanner will be initialized in DOM inside element with id of 'reader'
-        qrbox: {
-            width: 250,
-            height: 250,
-        },  // Sets dimensions of scanning box (set relative to reader element width)
-        fps: 20, // Frames per second to attempt a scan
-    });
-
-    scanner2.render(success, error);
-    });
+    function addElement() {
+      if(document.getElementById('result')){
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "reader");
+        document.getElementById('result').remove();
+        document.getElementById('main').appendChild(newDiv);
+        scanner.render(success, error);
+      }
+    };
 
 </script>
 </body>
