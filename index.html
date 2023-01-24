@@ -28,7 +28,6 @@
 <main>
     <div id="reader"></div>
     <div id="result"></div>
-    <button onclick="myFunction()" id="removeButton">Scan</button>
 </main>
     
 
@@ -58,7 +57,7 @@
     scanner.render(success, error);
     // Starts scanner
 
-    function myFunction(){
+   /* function myFunction(){
       console.log("shahid")
       document.getElementsByTagName('h2').remove();
       document.getElementsByTagName('p').remove();
@@ -67,21 +66,22 @@
       const element = document.createElement('div');
       element.setAttribute("id", "reader");
       scanner.render(success, error);
-    }
+    }*/
+
 
     function success(result) {
 
         document.getElementById('result').innerHTML = `
         <h2>Success!</h2>
         <p><a href="${result}">${result}</a></p>
-        <button onclick="myFunction()" id="removeButton">Scan</button>
+        <button onclick="onclick="history.go(-1)" id="removeButton">Scan</button>
         `;
         // Prints result as a link inside result element
 
         scanner.clear();
         // Clears scanning instance
 
-       // document.getElementById('reader').remove();
+        document.getElementById('reader').remove();
         // Removes reader element from DOM since no longer needed
     
     }
@@ -90,6 +90,16 @@
         console.error(err);
         // Prints any errors to the console
     }
+
+    
+    let renderReader = document.getElementById("removeButton");
+    renderReader.addEventListener("click", function() {
+      console.log("shahid")
+      const element = document.createElement('div');
+      element.id = "shahid";
+      document.getElementsByTagName('main').appendChild(element);
+      scanner.render(success, error);
+    });
 
 </script>
 </body>
