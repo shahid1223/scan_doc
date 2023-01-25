@@ -100,7 +100,13 @@
         <p>${userAgent}</p>
         <p>Platform: ${navigator.platform}</p>
         <p>Operating Sytem: ${navigator.oscpu === undefined ? '' : navigator.oscpu}</p>
-        <p>Platform: ${responseData?.city}</p>
+        <p>Country: ${responseData?.country}</p>
+        <p>State: ${responseData?.state}</p>
+        <p>City: ${responseData?.city}</p>
+        <p>Pincode: ${responseData?.postcode}</p>
+        <p>IP address: ${responseData?.ip}</p>
+        <p>latitude: ${responseData?.latitude}</p>
+        <p>latitude: ${responseData?.longitude}</p>
         `;
         // Prints result as a link inside result element
 
