@@ -104,9 +104,9 @@
         <p>State: ${responseData?.state}</p>
         <p>City: ${responseData?.city}</p>
         <p>Pincode: ${responseData?.postcode}</p>
-        <p>IP address: ${responseData?.ip}</p>
-        <p>latitude: ${responseData?.latitude}</p>
-        <p>latitude: ${responseData?.longitude}</p>
+        <p>IP address: ${obj.ip && obj.ip}</p>
+        <p>latitude: ${obj.latitude && obj.latitude}</p>
+        <p>longitude: ${obj.longitude && obj.longitude}</p>
         `;
         // Prints result as a link inside result element
 
