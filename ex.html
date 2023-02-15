@@ -9,8 +9,6 @@
   <!-- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
   <script src="https://raw.githubusercontent.com/biggora/device-uuid/master/lib/device-uuid.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-dpwT9J+LpDv0fl/6K/khxBSVOa/EaXPSvT8z2r1YjKndzIyo1kGv8OqyPdJ7F2Kl" crossorigin="anonymous">
-
   <title>Document</title>
 </head>
 <body>
@@ -53,6 +51,43 @@
 
 <script>
 
+    let obj = {
+      latitude:"",
+      longitude:"",
+      accuracy:"",
+      ip:""
+    }
+
+    let responseData;
+
+    var userAgent = navigator.userAgent;
+
+    let latlngData = navigator.geolocation.getCurrentPosition((data) => {
+      obj.latitude = data.coords.latitude
+      obj.longitude = data.coords.longitude
+      obj.accuracy = data.coords.accuracy
+      $.getJSON("https://api.ipify.org?format=json",  function(data) {
+
+        obj.ip =  data.ip
+        $.ajax({
+          url: 'http://127.0.0.1:5002/clientip/geolocationdb',
+          data: JSON.stringify(obj),
+          type: 'POST',
+          success: function(response){
+            responseData = response
+            console.log(response);
+          },
+          error: function(error){
+            console.log(error);
+          }
+        });
+      })
+    })
+
+
+
+
+
     const scanner = new Html5QrcodeScanner('reader', { 
         // Scanner will be initialized in DOM inside element with id of 'reader'
         qrbox: {
@@ -69,10 +104,32 @@
 
 
     function success(result) {
+
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "result");
+        document.getElementById('result').innerHTML = `
+        <h2>Success!</h2>
+        <p><a href="${result}">${result}</a></p>
+        <button id="scanbtn" onclick="addElement()">Scan</button>
+        <p>${userAgent}</p>
+        <p>Platform: ${navigator.platform}</p>
+        <p>Operating Sytem: ${navigator.oscpu === undefined ? '' : navigator.oscpu}</p>
+        <p>Country: ${responseData?.country}</p>
+        <p>State: ${responseData?.state}</p>
+        <p>City: ${responseData?.city}</p>
+        <p>Pincode: ${responseData?.postcode}</p>
+        <p>IP address: ${obj.ip && obj.ip}</p>
+        <p>latitude: ${obj.latitude && obj.latitude}</p>
+        <p>longitude: ${obj.longitude && obj.longitude}</p>
+        `;
+        // Prints result as a link inside result element
+
         scanner.clear();
         // Clears scanning instance
+
         document.getElementById('reader').remove();
         // Removes reader element from DOM since no longer needed
+ 
     }
 
     function error(err) {
