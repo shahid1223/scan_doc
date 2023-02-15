@@ -76,14 +76,11 @@
       <p><a href="${result}">${result}</a></p>
       <button id="scanbtn" onclick="addElement()">Scan</button>
         scanner.clear();
-        // Clears scanning instance
-        document.getElementById('reader').remove();
-        // Removes reader element from DOM since no longer needed
+        document.getElementById('reader').remove()`;
     }
 
     function error(err) {
         console.error(err);
-        // Prints any errors to the console
     }
 
     
